@@ -2,4 +2,9 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+
+require('mason').setup {
+  log_level = vim.log.levels.DEBUG,
+}
+
 return {}

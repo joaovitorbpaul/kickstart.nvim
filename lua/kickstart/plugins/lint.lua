@@ -7,8 +7,9 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        javascript = { 'eslint_d' },
+        typescript = { 'eslint_d' },
       }
-
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
@@ -40,6 +41,8 @@ return {
       -- lint.linters_by_ft['ruby'] = nil
       -- lint.linters_by_ft['terraform'] = nil
       -- lint.linters_by_ft['text'] = nil
+      -- lint.linters_by_ft['javascript'] = { 'eslint_d' }
+      -- lint.linters_by_ft['typescript'] = { 'eslint_d' }
 
       -- Create autocommand which carries out the actual linting
       -- on the specified events.
