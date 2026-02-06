@@ -1,5 +1,8 @@
+vim.opt.guicursor = 'n-v-c-i:block'
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '{', '{zz')
+vim.keymap.set('n', '}', '}zz')
 vim.keymap.set('n', '<C-p>v', vim.cmd.Ex)
 vim.keymap.set('n', '<C-T>', vim.cmd.tabnew)
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
