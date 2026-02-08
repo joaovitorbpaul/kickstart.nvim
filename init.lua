@@ -252,6 +252,46 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false, -- Avoid lazy-loading
+    config = function()
+      require('transparent').setup {
+        groups = {
+          'Normal',
+          'NormalNC',
+          'Comment',
+          'Constant',
+          'Special',
+          'Identifier',
+          'Statement',
+          'PreProc',
+          'Type',
+          'Underlined',
+          'Todo',
+          'String',
+          'Function',
+          'Conditional',
+          'Repeat',
+          'Operator',
+          'Structure',
+          'LineNr',
+          'NonText',
+          'SignColumn',
+          'CursorLine',
+          'CursorLineNr',
+          'StatusLine',
+          'StatusLineNC',
+          'EndOfBuffer',
+        },
+        extra_groups = {}, -- table of extra highlight groups to clear
+        exclude_groups = {}, -- table of highlight groups to exclude
+      }
+      require('transparent').clear_prefix 'NeoTree'
+      require('transparent').clear_prefix 'Telescope'
+      require('tokyonight').setup { transparent = vim.g.transparent_enabled }
+    end,
+  },
   'f-person/git-blame.nvim',
   { 'github/copilot.vim' },
   { 'tpope/vim-fugitive', lazy = false },
@@ -417,6 +457,10 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          file_ignore_patterns = {
+            'node_modules',
+            '.git',
+          },
           mappings = {
             i = { ['<c-d>'] = 'delete_buffer' },
           },
@@ -685,6 +729,10 @@ require('lazy').setup({
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+      vim.lsp.config('html', {
+        capabilities = capabilities,
+      })
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -860,12 +908,15 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+              require('luasnip').filetype_extend('javascriptreact', { 'html' })
+              require('luasnip').filetype_extend('typescriptreact', { 'html' })
+              require('luasnip').filetype_extend('vue', { 'vue' })
+            end,
+          },
         },
         opts = {},
       },
@@ -957,18 +1008,41 @@ require('lazy').setup({
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'tokyonight-night'
     end,
+    -- opts = {
+    --   transparent = true,
+    --   styles = {
+    --     sidebars = 'transparent',
+    --     floats = 'transparent',
+    --   },
+    -- },
   },
   {
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
     init = function()
-      vim.cmd.colorscheme 'catppuccin-mocha'
+      -- vim.cmd.colorscheme 'catppuccin-mocha'
     end,
+    opts = {
+      transparent = true,
+      styles = {
+        sidebars = 'transparent',
+        floats = 'transparent',
+      },
+    },
   },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
+  {
+    'kylechui/nvim-surround',
+    version = '^3.0.0', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup {
+        -- Configuration here, or leave empty to use defaults
+      }
+    end,
+  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
